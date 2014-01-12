@@ -1,6 +1,6 @@
 jQuery.Show-hide-password
 =========================
-The simple jQuery plugin for display password as plain text, supported cancelable events
+The simple jQuery plugin for display password as plain text, one file only and supported cancelable events, see [demo](http://djraphael.github.io/jQuery.Show-hide-password/)
 
 ### Usage
 #### Simple
