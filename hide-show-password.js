@@ -68,6 +68,7 @@
         this.options = op;
         this.isShow = false;
         this.retypeInput = $(op.retypeInput);
+        this.isHeightInit =  /Chrome/.test(navigator.userAgent) ||  /WebKit/.test(navigator.userAgent);
         if (this.retypeInput.length == 0) {
             this.retypeInput = null;
         }
@@ -81,14 +82,14 @@
             op.onHide = defaultOptions.onHide;
         }
         if (!this.options.size) {
-            this.options.size = this.$element.outerHeight(false);
+            this.options.size = (this.$element.outerHeight(false) + this.$element.height())/2;
         }
-
         this.init();
     }
 
     ShowHidePassword.prototype = {
         init: function() {
+            this.initHeight();
             this.$element.wrap("<span></span>");
             this.$wrapper = this.$element.parent();
             this.$wrapper.css({ position: 'relative' });
@@ -96,6 +97,16 @@
                 .css({ backgroundSize: this.options.size + 'px', width: this.options.size + 'px', height: this.options.size + 'px', marginRight: '2px' })
                 .click(this.onclick.bind(this))
                 .insertBefore(this.$element);
+        },
+        
+        initHeight: function () {
+            if (!this.isHeightInit && this.$element.height() > 0) {
+                this.isHeightInit = true;
+                this.$element.css({height:this.$element.height() + 'px', width: this.$element.width()+ 'px'});
+                if (this.retypeInput) {
+                    this.retypeInput.css({height:this.retypeInput.height() + 'px', width: this.retypeInput.width()+ 'px'});
+                }
+            } 
         },
 
         onclick: function(e) {
@@ -111,6 +122,7 @@
         },
 
         show: function () {
+            this.initHeight();
             var e = { currentTarget: this.$element[0], isShow: this.isShow};
             if (!this.isShow && (this.options.onShow(e) & this.options.onToggle(e))) {
                 this.isShow = true;
